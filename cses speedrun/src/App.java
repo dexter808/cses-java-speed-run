@@ -85,22 +85,31 @@ public class App {
     // within set 1 + within set 2 + between set 1 and set 2
     // prev answer + 
     private static void solve() {
-        int n = in.nextInt();
-        List<String> ans = new ArrayList<>();
-        printMoves(1,3,n,ans);
+        char[] s = in.nextLine().toCharArray();
+        Set<String> ans = new TreeSet<>();
+        permute(s,0,ans);
         out.println(ans.size());
         for(String s1: ans) {
             out.println(s1);
         }
     }
-    static void printMoves(int s, int t, int nd, List<String> ans) {
-        int i = 1^2^3^s^t;
-        if (nd == 1) {
-            ans.add(s + " " + t);
-        } else {
-            printMoves(s,i,nd-1,ans);
-            printMoves(s,t,1,ans);
-            printMoves(i,t,nd-1,ans);
+    public static void permute(char[] s, int i, Set<String> ans) {
+        if (i == s.length - 1) {
+            ans.add(new String(s));
+            return;
+        }
+        permute(s,i + 1, ans);
+        for(int j = i + 1; j < s.length; j++) {
+            char tm = s[i];
+            s[i] = s[j];
+            s[j] = tm;
+
+            permute(s,i + 1, ans);
+
+            // Revert
+            tm = s[i];
+            s[i] = s[j];
+            s[j] = tm;
         }
     } 
 }
