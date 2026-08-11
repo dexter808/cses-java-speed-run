@@ -85,33 +85,31 @@ public class App {
     // within set 1 + within set 2 + between set 1 and set 2
     // prev answer + 
     private static void solve() {
-        char[] s = in.nextLine().toCharArray();
-        Set<String> ans = new TreeSet<>();
-        permute(s,0,ans);
-        out.println(ans.size());
-        for(String s1: ans) {
-            out.println(s1);
+        int n = in.nextInt();
+        long[] ws = new long[n];
+        long s = 0;
+        for(int i = 0; i < n; i++) {
+            ws[i] = in.nextLong();
+            s += ws[i];
         }
+
+        Set<Long> bag = new HashSet<>();
+
+        bag.add((long)0);
+        long ans = s * 2;
+
+        for(long w: ws) {
+            List<Long> tm = new ArrayList<>();
+            for(long e: bag) {
+                ans = Math.min(ans, Math.abs(2*(e + w) - s));
+                tm.add(e + w);
+            }
+            bag.addAll(tm);
+        }
+        out.println(ans);
     }
-    public static void permute(char[] s, int i, Set<String> ans) {
-        if (i == s.length - 1) {
-            ans.add(new String(s));
-            return;
-        }
-        permute(s,i + 1, ans);
-        for(int j = i + 1; j < s.length; j++) {
-            char tm = s[i];
-            s[i] = s[j];
-            s[j] = tm;
-
-            permute(s,i + 1, ans);
-
-            // Revert
-            tm = s[i];
-            s[i] = s[j];
-            s[j] = tm;
-        }
-    } 
+    // public static void permute(char[] s, int i, Set<String> ans) {
+    // } 
 }
 
 /**
