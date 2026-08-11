@@ -68,7 +68,7 @@ public class App {
         PrintWriter out = new PrintWriter(new BufferedOutputStream(System.out));
 
         // Read number of test cases (use 1 if the problem doesn't specify 't')
-        int t = 1; 
+        int t = in.nextInt(); 
 
         while (t-- > 0) {
             solve(in, out);
@@ -80,27 +80,26 @@ public class App {
 
     // Logic implementation
     private static void solve(FastReader in, PrintWriter out) {
-        int n = in.nextInt();
-        if (n == 1) {
-            out.println("1");
-        } else if (n < 4) {
-            out.println("NO SOLUTION");
-        } else if (n == 4) {
-            out.println("2 4 1 3");
+        long x = in.nextLong();
+        long y = in.nextLong();
+        long ans = 0;
+        if (x >= y) {
+            if (x % 2 == 0) {
+                // decrease from x^2 - (y - 1)
+                ans = x * x - y + 1;
+            } else {
+                ans = (x - 1) * (x - 1) + y;
+            }
         } else {
-            // 1 4 2 5 3
-            int i1 = 1;
-            int i2 = ((n + 1) / 2) + 1;
-
-            do {
-                out.print(i1 + " " + i2 + " ");
-                i1++;
-                i2++;
-            } while (i2 <= n);
-            
-            if (n % 2 == 1) {
-                out.println(i1);
-            } 
+            if (y % 2 == 0) {
+                ans = (y - 1) * (y - 1) + x;
+            } else {
+                ans = y * y - x + 1;
+            }
         }
+        out.println(ans);
+        // max will decide the range 
+        // min will decide the origin
+        // 
     }
 }
