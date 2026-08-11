@@ -86,22 +86,12 @@ public class App {
     // prev answer + 
     private static void solve(FastReader in, PrintWriter out) {
         long n = in.nextLong();
-        out.println(binexp((long)2,n,(long)1e9+7));
-    }
-
-    private static long binexp(long a, long b, long mod) {
-        if (b==0) {
-            return 1;
+        long c = 0;
+        long p = 5;
+        while (n >= p) {
+            c += n / p;
+            p = p * 5;
         }
-        long ans = 1;
-        while (b > 0) {
-            if (b%2==1) {
-                ans = (ans * a) % mod;
-            }
-            a = (a*a) % mod;
-            b /= 2;
-        }
-
-        return ans;
+        out.println(c);
     }
 }
