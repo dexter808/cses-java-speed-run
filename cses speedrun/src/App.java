@@ -68,7 +68,7 @@ public class App {
         PrintWriter out = new PrintWriter(new BufferedOutputStream(System.out));
 
         // Read number of test cases (use 1 if the problem doesn't specify 't')
-        int t = in.nextInt(); 
+        int t = 1; 
 
         while (t-- > 0) {
             solve(in, out);
@@ -79,27 +79,36 @@ public class App {
     }
 
     // Logic implementation
+    // Think of it int layer wise set
+    // set 1 -> (n-1)*(n-1)
+    // set 2 -> (2*n-1)
+    // within set 1 + within set 2 + between set 1 and set 2
+    // prev answer + 
     private static void solve(FastReader in, PrintWriter out) {
-        long x = in.nextLong();
-        long y = in.nextLong();
-        long ans = 0;
-        if (x >= y) {
-            if (x % 2 == 0) {
-                // decrease from x^2 - (y - 1)
-                ans = x * x - y + 1;
+        long n = in.nextLong();
+        long ans = 252;
+        for(long i = 1; i <= n; i++) {
+            if (i == 1) {
+                out.println(0);
+                continue;
+            } else if (i == 2) {
+                out.println(6);
+                continue;
+            } else if (i == 3) {
+                out.println(28);
+                continue;
+            } else if (i == 4) {
+                out.println(96);
+                continue;
+            } else if (i == 5) {
+                out.println(252);
+                continue;
             } else {
-                ans = (x - 1) * (x - 1) + y;
-            }
-        } else {
-            if (y % 2 == 0) {
-                ans = (y - 1) * (y - 1) + x;
-            } else {
-                ans = y * y - x + 1;
+                long c = i * i;
+                ans = (c * (c - 1) / 2);
+                ans = ans - 4*(i-2)*(i-1);
+                out.println(ans);
             }
         }
-        out.println(ans);
-        // max will decide the range 
-        // min will decide the origin
-        // 
     }
 }
