@@ -85,30 +85,44 @@ public class App {
     // within set 1 + within set 2 + between set 1 and set 2
     // prev answer + 
     private static void solve(FastReader in, PrintWriter out) {
-        long n = in.nextLong();
-        long ans = 252;
-        for(long i = 1; i <= n; i++) {
-            if (i == 1) {
-                out.println(0);
-                continue;
-            } else if (i == 2) {
-                out.println(6);
-                continue;
-            } else if (i == 3) {
-                out.println(28);
-                continue;
-            } else if (i == 4) {
-                out.println(96);
-                continue;
-            } else if (i == 5) {
-                out.println(252);
-                continue;
-            } else {
-                long c = i * i;
-                ans = (c * (c - 1) / 2);
-                ans = ans - 4*(i-2)*(i-1);
-                out.println(ans);
+        int n = in.nextInt();
+        long k1 = n;
+        long s = (k1 * (k1+1)) / 2;
+        if (s%2 == 1) {
+            out.println("NO");
+        } else {
+            out.println("YES");
+            boolean[] c = new boolean[n + 1];
+            long sm = s / 2;
+            int k = n;
+            int ct = 0;
+            while (sm != 0) {
+                if (sm >= k) {
+                    sm -= k;
+                    c[k] = true;
+                    k--;
+                    ct++;
+                } else {
+                    c[(int)sm] = true;
+                    ct++;
+                    break;
+                }
+            } 
+            out.println(ct);
+            for(int i = 1; i <= n; i++) {
+                if (c[i]) {
+                    out.print(i + " ");
+                }
             }
+            out.println();
+
+            out.println(n - ct);
+            for(int i = 1; i <= n; i++) {
+                if (!c[i]) {
+                    out.print(i + " ");
+                }
+            }
+            out.println();
         }
     }
 }
