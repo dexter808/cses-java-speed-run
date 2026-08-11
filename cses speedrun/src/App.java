@@ -85,44 +85,23 @@ public class App {
     // within set 1 + within set 2 + between set 1 and set 2
     // prev answer + 
     private static void solve(FastReader in, PrintWriter out) {
-        int n = in.nextInt();
-        long k1 = n;
-        long s = (k1 * (k1+1)) / 2;
-        if (s%2 == 1) {
-            out.println("NO");
-        } else {
-            out.println("YES");
-            boolean[] c = new boolean[n + 1];
-            long sm = s / 2;
-            int k = n;
-            int ct = 0;
-            while (sm != 0) {
-                if (sm >= k) {
-                    sm -= k;
-                    c[k] = true;
-                    k--;
-                    ct++;
-                } else {
-                    c[(int)sm] = true;
-                    ct++;
-                    break;
-                }
-            } 
-            out.println(ct);
-            for(int i = 1; i <= n; i++) {
-                if (c[i]) {
-                    out.print(i + " ");
-                }
-            }
-            out.println();
+        long n = in.nextLong();
+        out.println(binexp((long)2,n,(long)1e9+7));
+    }
 
-            out.println(n - ct);
-            for(int i = 1; i <= n; i++) {
-                if (!c[i]) {
-                    out.print(i + " ");
-                }
-            }
-            out.println();
+    private static long binexp(long a, long b, long mod) {
+        if (b==0) {
+            return 1;
         }
+        long ans = 1;
+        while (b > 0) {
+            if (b%2==1) {
+                ans = (ans * a) % mod;
+            }
+            a = (a*a) % mod;
+            b /= 2;
+        }
+
+        return ans;
     }
 }
