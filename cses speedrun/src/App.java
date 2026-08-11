@@ -68,7 +68,8 @@ public class App {
         PrintWriter out = new PrintWriter(new BufferedOutputStream(System.out));
 
         // Read number of test cases (use 1 if the problem doesn't specify 't')
-        int t = in.nextInt(); 
+        // int t = in.nextInt(); 
+        int t = 1; 
 
         while (t-- > 0) {
             solve(in, out);
@@ -85,18 +86,39 @@ public class App {
     // within set 1 + within set 2 + between set 1 and set 2
     // prev answer + 
     private static void solve(FastReader in, PrintWriter out) {
-        int a = in.nextInt();
-        int b = in.nextInt();
-        if (a < b) {
-            int tm = a;
-            a = b;
-            b = tm;
+        char[] s = in.nextLine().toCharArray();
+        int[] f = new int[26];
+        char[] ans = new char[s.length];
+
+        for(char c: s) {
+            f[c - 'A']++;
         }
-        int d = a - b;
-        if ( b >= d && (b - d) % 3 == 0) {
-            out.println("YES");
-        } else {
-            out.println("NO");
+
+        int o = s.length % 2;
+        int mc = -1;
+        for(int i = 0; i < 26; i++) {
+            if (f[i] % 2 == 1) {
+                o--;
+                mc = i;
+                if (o < 0) {
+                    out.println("NO SOLUTION");
+                    return;
+                }
+            }
         }
+        int it = 0;
+        for(int i = 0; i < 26; i++) {
+            if (f[i] % 2 == 1) {
+                ans[s.length / 2] = (char)('A' + mc);
+                f[i]--;
+            } 
+            while (f[i] > 0) {
+                ans[it] = (char)('A' + i);
+                ans[s.length - 1 - it] = ans[it];
+                f[i] -= 2;
+                it++;
+            }
+        }
+        out.println(ans);
     }
 }
