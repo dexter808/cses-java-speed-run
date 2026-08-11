@@ -86,39 +86,28 @@ public class App {
     // within set 1 + within set 2 + between set 1 and set 2
     // prev answer + 
     private static void solve(FastReader in, PrintWriter out) {
-        char[] s = in.nextLine().toCharArray();
-        int[] f = new int[26];
-        char[] ans = new char[s.length];
-
-        for(char c: s) {
-            f[c - 'A']++;
-        }
-
-        int o = s.length % 2;
-        int mc = -1;
-        for(int i = 0; i < 26; i++) {
-            if (f[i] % 2 == 1) {
-                o--;
-                mc = i;
-                if (o < 0) {
-                    out.println("NO SOLUTION");
-                    return;
+        int n = in.nextInt();
+        for(int i = 0; i < Math.pow(2,n); i++) {
+            for(int j = 0; j < n; j++) {
+                int k = i/(int)Math.pow(2,n-1-j);
+                if (k%4 == 0 || k%4 == 3) {
+                    out.print(0);
+                } else {
+                    out.print(1);
                 }
             }
+            out.println();
         }
-        int it = 0;
-        for(int i = 0; i < 26; i++) {
-            if (f[i] % 2 == 1) {
-                ans[s.length / 2] = (char)('A' + mc);
-                f[i]--;
-            } 
-            while (f[i] > 0) {
-                ans[it] = (char)('A' + i);
-                ans[s.length - 1 - it] = ans[it];
-                f[i] -= 2;
-                it++;
-            }
-        }
-        out.println(ans);
     }
 }
+
+/**
+ * 000
+ * 001
+ * 011
+ * 010
+ * 110
+ * 111
+ * 101
+ * 100
+ */
