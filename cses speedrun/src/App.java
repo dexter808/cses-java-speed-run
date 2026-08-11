@@ -81,13 +81,26 @@ public class App {
     // Logic implementation
     private static void solve(FastReader in, PrintWriter out) {
         int n = in.nextInt();
-        int[] a = in.nextIntArray(n);
+        if (n == 1) {
+            out.println("1");
+        } else if (n < 4) {
+            out.println("NO SOLUTION");
+        } else if (n == 4) {
+            out.println("2 4 1 3");
+        } else {
+            // 1 4 2 5 3
+            int i1 = 1;
+            int i2 = ((n + 1) / 2) + 1;
 
-        long ans = 0;
-        for(int i = 1; i < n; i++) {
-            ans += Math.max(0, a[i - 1] - a[i]);
-            a[i] = Math.max(a[i], a[i - 1]);
+            do {
+                out.print(i1 + " " + i2 + " ");
+                i1++;
+                i2++;
+            } while (i2 <= n);
+            
+            if (n % 2 == 1) {
+                out.println(i1);
+            } 
         }
-        out.println(ans);
     }
 }
