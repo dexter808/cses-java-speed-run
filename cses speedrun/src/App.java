@@ -68,7 +68,7 @@ public class App {
         PrintWriter out = new PrintWriter(new BufferedOutputStream(System.out));
 
         // Read number of test cases (use 1 if the problem doesn't specify 't')
-        int t = 1; 
+        int t = in.nextInt(); 
 
         while (t-- > 0) {
             solve(in, out);
@@ -85,13 +85,18 @@ public class App {
     // within set 1 + within set 2 + between set 1 and set 2
     // prev answer + 
     private static void solve(FastReader in, PrintWriter out) {
-        long n = in.nextLong();
-        long c = 0;
-        long p = 5;
-        while (n >= p) {
-            c += n / p;
-            p = p * 5;
+        int a = in.nextInt();
+        int b = in.nextInt();
+        if (a < b) {
+            int tm = a;
+            a = b;
+            b = tm;
         }
-        out.println(c);
+        int d = a - b;
+        if ( b >= d && (b - d) % 3 == 0) {
+            out.println("YES");
+        } else {
+            out.println("NO");
+        }
     }
 }
