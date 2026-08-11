@@ -62,17 +62,16 @@ public class App {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        // Initialize FastReader and FastWriter
-        FastReader in = new FastReader();
-        PrintWriter out = new PrintWriter(new BufferedOutputStream(System.out));
+    static FastReader in = new FastReader();
+    static PrintWriter out = new PrintWriter(new BufferedOutputStream(System.out));
 
+    public static void main(String[] args) throws IOException {
         // Read number of test cases (use 1 if the problem doesn't specify 't')
         // int t = in.nextInt(); 
         int t = 1; 
 
         while (t-- > 0) {
-            solve(in, out);
+            solve();
         }
 
         // Essential: Flush out the remaining stream before exiting
@@ -85,20 +84,20 @@ public class App {
     // set 2 -> (2*n-1)
     // within set 1 + within set 2 + between set 1 and set 2
     // prev answer + 
-    private static void solve(FastReader in, PrintWriter out) {
+    private static void solve() {
         int n = in.nextInt();
-        for(int i = 0; i < Math.pow(2,n); i++) {
-            for(int j = 0; j < n; j++) {
-                int k = i/(int)Math.pow(2,n-1-j);
-                if (k%4 == 0 || k%4 == 3) {
-                    out.print(0);
-                } else {
-                    out.print(1);
-                }
-            }
-            out.println();
-        }
+        printMoves(1,3,n);
     }
+    static void printMoves(int s, int t, int nd) {
+        int i = 1^2^3^s^t;
+        if (nd == 1) {
+            out.println(s + " " + t);
+        } else {
+            printMoves(s,i,nd-1);
+            printMoves(s,t,1);
+            printMoves(i,t,nd-1);
+        }
+    } 
 }
 
 /**
