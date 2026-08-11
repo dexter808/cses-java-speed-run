@@ -80,17 +80,13 @@ public class App {
 
     // Logic implementation
     private static void solve(FastReader in, PrintWriter out) {
-        char[] s = in.nextLine().toCharArray();
+        int n = in.nextInt();
+        int[] a = in.nextIntArray(n);
 
-        int ans = 1;
-        int c = 1;
-        for (int i = 1; i < s.length; i++) {
-            if (s[i] == s[i - 1]) {
-                c++;
-                ans = Math.max(ans,c);
-            } else {
-                c = 1;
-            }
+        long ans = 0;
+        for(int i = 1; i < n; i++) {
+            ans += Math.max(0, a[i - 1] - a[i]);
+            a[i] = Math.max(a[i], a[i - 1]);
         }
         out.println(ans);
     }
