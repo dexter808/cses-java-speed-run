@@ -80,5 +80,15 @@ public class App {
 
     // Logic implementation
     private static void solve(FastReader in, PrintWriter out) {
+        long n = in.nextLong();
+        while ( n != 1) {
+            out.print(n + " ");
+            if ( n%2 == 0) {
+                n /= 2;
+            } else {
+                n = n * 3 + 1;
+            }
+        }
+        out.println(n);
     }
 }
