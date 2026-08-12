@@ -85,31 +85,39 @@ public class App {
     // within set 1 + within set 2 + between set 1 and set 2
     // prev answer + 
     private static void solve() {
-        int n = in.nextInt();
-        long[] ws = new long[n];
-        long s = 0;
+        int n = 8;
+        char[][] ar = new char[n][n];
+
         for(int i = 0; i < n; i++) {
-            ws[i] = in.nextLong();
-            s += ws[i];
+            ar[i] = in.nextLine().toCharArray();
         }
 
-        Set<Long> bag = new HashSet<>();
+        boolean c[] = new boolean[n];
+        boolean od[] = new boolean[2 * n - 1]; // obtuse diagonal; 
+        boolean ad[] = new boolean[2 * n - 1]; // acute diagonal;
 
-        bag.add((long)0);
-        long ans = s * 2;
-
-        for(long w: ws) {
-            List<Long> tm = new ArrayList<>();
-            for(long e: bag) {
-                ans = Math.min(ans, Math.abs(2*(e + w) - s));
-                tm.add(e + w);
-            }
-            bag.addAll(tm);
+        int ans = 0;
+        for(int k = 0; k < n; k++) {
+            ans += dfs(0,k,n,c,od,ad,ar);
         }
+
         out.println(ans);
     }
-    // public static void permute(char[] s, int i, Set<String> ans) {
-    // } 
+    private static int dfs(int i, int j, int n, boolean[] c, boolean[] ad, boolean[] od, char[][] ar) {
+        int ans = 0;
+        // check if current combo possible
+        if (ar[i][j] == '.' && !c[j] && !ad[i+j] && !od[i-j+(n-1)]) {
+            if(i == n - 1) {
+                return 1;
+            }
+            ad[i + j] = c[j] = od[(n-1) + i - j] = true;
+            for(int k = 0; k < n; k++) {
+                ans += dfs(i+1,k,n,c,ad,od,ar);
+            }
+            ad[i + j] = c[j] = od[(n-1) + i - j] = false;
+        }
+        return ans;
+    }
 }
 
 /**
