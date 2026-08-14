@@ -67,8 +67,8 @@ public class App {
 
     public static void main(String[] args) throws IOException {
         // Read number of test cases (use 1 if the problem doesn't specify 't')
-        // int t = in.nextInt(); 
-        int t = 1; 
+        int t = in.nextInt(); 
+        // int t = 1; 
 
         while (t-- > 0) {
             solve();
@@ -85,39 +85,55 @@ public class App {
     // within set 1 + within set 2 + between set 1 and set 2
     // prev answer + 
     private static void solve() {
-        int n = 8;
-        char[][] ar = new char[n][n];
+        int n = in.nextInt();
+        int a = in.nextInt();
+        int b = in.nextInt();
 
-        for(int i = 0; i < n; i++) {
-            ar[i] = in.nextLine().toCharArray();
+        if (a + b > n || ((a == 0 || b == 0) && (a > 0 || b > 0))) {
+            System.out.println("NO");
+            return;
+        } 
+        System.out.println("YES");
+
+        // Play all neutral cards
+        int d = n - (a+b); // from (d+1)..n will be equal by both
+
+        // 
+        int pt = a + b;
+        int wd = Math.min(a,b);
+        int a1 = 0;
+        int b1 = 0;
+        if (a > b) {
+            a1 += wd;
+        } else {
+            b1 += wd;
+        }
+        List<Integer> ac = new ArrayList<>();
+        List<Integer> bc = new ArrayList<>();
+        
+        for(int i = n - d + 1; i <= n; i++) {
+            ac.add(i);
+            bc.add(i);
         }
 
-        boolean c[] = new boolean[n];
-        boolean od[] = new boolean[2 * n - 1]; // obtuse diagonal; 
-        boolean ad[] = new boolean[2 * n - 1]; // acute diagonal;
-
-        int ans = 0;
-        for(int k = 0; k < n; k++) {
-            ans += dfs(0,k,n,c,od,ad,ar);
-        }
-
-        out.println(ans);
-    }
-    private static int dfs(int i, int j, int n, boolean[] c, boolean[] ad, boolean[] od, char[][] ar) {
-        int ans = 0;
-        // check if current combo possible
-        if (ar[i][j] == '.' && !c[j] && !ad[i+j] && !od[i-j+(n-1)]) {
-            if(i == n - 1) {
-                return 1;
+        if (d != n) {
+            for(int i = 1; i <= n - d; i++) {
+                ac.add((a1++ % (n - d)) + 1);
+                bc.add((b1++ % (n - d)) + 1);
             }
-            ad[i + j] = c[j] = od[(n-1) + i - j] = true;
-            for(int k = 0; k < n; k++) {
-                ans += dfs(i+1,k,n,c,ad,od,ar);
-            }
-            ad[i + j] = c[j] = od[(n-1) + i - j] = false;
         }
-        return ans;
+
+        for(int i: ac) {
+            System.out.print(i + " ");
+        }
+        System.out.println();
+        
+        for(int i: bc) {
+            System.out.print(i + " ");
+        }
+        System.out.println();
     }
+
 }
 
 /**
