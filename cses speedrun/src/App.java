@@ -67,8 +67,8 @@ public class App {
 
     public static void main(String[] args) throws IOException {
         // Read number of test cases (use 1 if the problem doesn't specify 't')
-        int t = in.nextInt(); 
-        // int t = 1; 
+        // int t = in.nextInt(); 
+        int t = 1; 
 
         while (t-- > 0) {
             solve();
@@ -86,52 +86,36 @@ public class App {
     // prev answer + 
     private static void solve() {
         int n = in.nextInt();
-        int a = in.nextInt();
-        int b = in.nextInt();
 
-        if (a + b > n || ((a == 0 || b == 0) && (a > 0 || b > 0))) {
-            System.out.println("NO");
-            return;
-        } 
-        System.out.println("YES");
-
-        // Play all neutral cards
-        int d = n - (a+b); // from (d+1)..n will be equal by both
-
-        // 
-        int pt = a + b;
-        int wd = Math.min(a,b);
-        int a1 = 0;
-        int b1 = 0;
-        if (a > b) {
-            a1 += wd;
-        } else {
-            b1 += wd;
+        int[][] ans = new int[n][n];
+        HashSet<Integer>[] r = new HashSet[n];
+        HashSet<Integer>[] c = new HashSet[n];
+        for(int i = 0; i < n; i++) {
+            ans[i][0] = ans[0][i] = i;
+            r[i] = new HashSet<>();
+            r[i].add(i);
+            c[i] = new HashSet<>();
+            c[i].add(i);
         }
-        List<Integer> ac = new ArrayList<>();
-        List<Integer> bc = new ArrayList<>();
-        
-        for(int i = n - d + 1; i <= n; i++) {
-            ac.add(i);
-            bc.add(i);
-        }
-
-        if (d != n) {
-            for(int i = 1; i <= n - d; i++) {
-                ac.add((a1++ % (n - d)) + 1);
-                bc.add((b1++ % (n - d)) + 1);
+        for(int i = 1; i < n; i++) {
+            for(int j = 1; j < n; j++) {
+                for(int k = 0; k < 2*n; k++) {
+                    if (!r[i].contains(k) && !c[j].contains(k)) {
+                        r[i].add(k);
+                        c[j].add(k);
+                        ans[i][j] = k;
+                        break;
+                    }
+                }
             }
         }
 
-        for(int i: ac) {
-            System.out.print(i + " ");
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < n; j++) {
+                System.out.print(ans[i][j] + " ");
+            }
+            System.out.println();
         }
-        System.out.println();
-        
-        for(int i: bc) {
-            System.out.print(i + " ");
-        }
-        System.out.println();
     }
 
 }
