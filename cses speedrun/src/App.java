@@ -79,54 +79,53 @@ public class App {
     }
 
     // Logic implementation
-    // Think of it int layer wise set
-    // set 1 -> (n-1)*(n-1)
-    // set 2 -> (2*n-1)
-    // within set 1 + within set 2 + between set 1 and set 2
-    // prev answer + 
     private static void solve() {
         int n = in.nextInt();
-
-        int[][] ans = new int[n][n];
-        HashSet<Integer>[] r = new HashSet[n];
-        HashSet<Integer>[] c = new HashSet[n];
+        int[][] dp = new int[n][n];
+        
+        // default - Integer.max_value -2 
         for(int i = 0; i < n; i++) {
-            ans[i][0] = ans[0][i] = i;
-            r[i] = new HashSet<>();
-            r[i].add(i);
-            c[i] = new HashSet<>();
-            c[i].add(i);
+            for(int j = 0; j < n; j++) {
+                dp[i][j] = Integer.MAX_VALUE;
+            }
         }
-        for(int i = 1; i < n; i++) {
-            for(int j = 1; j < n; j++) {
-                for(int k = 0; k < 2*n; k++) {
-                    if (!r[i].contains(k) && !c[j].contains(k)) {
-                        r[i].add(k);
-                        c[j].add(k);
-                        ans[i][j] = k;
-                        break;
+
+        ArrayDeque<int[]> dq = new ArrayDeque<>();
+        dq.add(new int[]{0,0});
+        dp[0][0] = 0;
+
+        while(!dq.isEmpty()) {
+            int[] tp = dq.pollFirst();
+
+            int i = tp[0];
+            int j = tp[1];
+
+            for(int v1: new int[]{-1,1}) {
+                for(int v2: new int[]{-2,2}) {
+                    int i1 = i + v1;
+                    int j1 = j + v2;
+
+                    if (i1 >= 0 && i1 < n && j1 >= 0 && j1 < n && dp[i1][j1] == Integer.MAX_VALUE) {
+                        dq.add(new int[]{i1, j1});
+                        dp[i1][j1] = dp[i][j] + 1;
+                    }
+
+                    i1 = i + v2;
+                    j1 = j + v1;
+
+                    if (i1 >= 0 && i1 < n && j1 >= 0 && j1 < n && dp[i1][j1] == Integer.MAX_VALUE) {
+                        dq.add(new int[]{i1, j1});
+                        dp[i1][j1] = dp[i][j] + 1;
                     }
                 }
             }
         }
-
+                
         for(int i = 0; i < n; i++) {
             for(int j = 0; j < n; j++) {
-                System.out.print(ans[i][j] + " ");
+                out.print(dp[i][j] + " ");
             }
-            System.out.println();
+            out.println();
         }
     }
-
 }
-
-/**
- * 000
- * 001
- * 011
- * 010
- * 110
- * 111
- * 101
- * 100
- */
