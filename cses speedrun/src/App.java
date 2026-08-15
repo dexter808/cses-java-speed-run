@@ -67,8 +67,8 @@ public class App {
 
     public static void main(String[] args) throws IOException {
         // Read number of test cases (use 1 if the problem doesn't specify 't')
-        // int t = in.nextInt(); 
-        int t = 1; 
+        int t = in.nextInt(); 
+        // int t = 1; 
 
         while (t-- > 0) {
             solve();
@@ -80,32 +80,29 @@ public class App {
 
     // Logic implementation
     private static void solve() {
-        int n = in.nextInt();
-        int m = in.nextInt();
+        String nums = "999999999999999999999";
+        long n = in.nextLong();
 
-        char[][] a = new char[n][m];
+        int d = 0;
+        long ul = 0;
+        long pt = 1;
 
-        for(int i = 0; i < n; i++) {
-            a[i] = in.nextLine().toCharArray();
-        }
-
-        for(int i = 0; i < n; i++) {
-            for(int j = 0; j < m; j++) {
-                if((i + j) % 2 == 0) {
-                    if(a[i][j] != 'A') {
-                        out.print('A');
-                    } else {
-                        out.print('C');
-                    }
-                } else {
-                    if(a[i][j] != 'B') {
-                        out.print('B');
-                    } else {
-                        out.print('D');
-                    }
+        while (true) {
+            d++;
+            long ll = ul;
+            ul += 9*pt*d;
+            pt = pt * 10;
+            if(ul >= n) {
+                long h = (n - ll + d - 1) / d;
+                long num = 0;
+                if (d > 1) {
+                    num = Long.parseLong(nums.substring(0, d - 1));
                 }
+                num += h;
+                long ind = (n - ll - 1) % (long)d;
+                out.println(("" + num).charAt((int)ind));
+                return;
             }
-            out.println();
         }
     }
 }
