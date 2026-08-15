@@ -81,49 +81,29 @@ public class App {
     // Logic implementation
     private static void solve() {
         int n = in.nextInt();
-        int[][] dp = new int[n][n];
-        
-        // default - Integer.max_value -2 
+        int m = in.nextInt();
+
+        char[][] a = new char[n][m];
+
         for(int i = 0; i < n; i++) {
-            for(int j = 0; j < n; j++) {
-                dp[i][j] = Integer.MAX_VALUE;
-            }
+            a[i] = in.nextLine().toCharArray();
         }
 
-        ArrayDeque<int[]> dq = new ArrayDeque<>();
-        dq.add(new int[]{0,0});
-        dp[0][0] = 0;
-
-        while(!dq.isEmpty()) {
-            int[] tp = dq.pollFirst();
-
-            int i = tp[0];
-            int j = tp[1];
-
-            for(int v1: new int[]{-1,1}) {
-                for(int v2: new int[]{-2,2}) {
-                    int i1 = i + v1;
-                    int j1 = j + v2;
-
-                    if (i1 >= 0 && i1 < n && j1 >= 0 && j1 < n && dp[i1][j1] == Integer.MAX_VALUE) {
-                        dq.add(new int[]{i1, j1});
-                        dp[i1][j1] = dp[i][j] + 1;
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < m; j++) {
+                if((i + j) % 2 == 0) {
+                    if(a[i][j] != 'A') {
+                        out.print('A');
+                    } else {
+                        out.print('C');
                     }
-
-                    i1 = i + v2;
-                    j1 = j + v1;
-
-                    if (i1 >= 0 && i1 < n && j1 >= 0 && j1 < n && dp[i1][j1] == Integer.MAX_VALUE) {
-                        dq.add(new int[]{i1, j1});
-                        dp[i1][j1] = dp[i][j] + 1;
+                } else {
+                    if(a[i][j] != 'B') {
+                        out.print('B');
+                    } else {
+                        out.print('D');
                     }
                 }
-            }
-        }
-                
-        for(int i = 0; i < n; i++) {
-            for(int j = 0; j < n; j++) {
-                out.print(dp[i][j] + " ");
             }
             out.println();
         }
