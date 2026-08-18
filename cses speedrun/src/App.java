@@ -82,29 +82,22 @@ public class App {
     private static void solve() {
         int n = in.nextInt();
         int m = in.nextInt();
-        int k = in.nextInt();
-        
-        int[] d = in.nextIntArray(n);
-        int[] a = in.nextIntArray(m);
 
-        Arrays.sort(a);
-        Arrays.sort(d);
+        int[] c = in.nextIntArray(n);
 
-        int ans = 0;
+        Arrays.sort(c);
+
         int p1 = 0;
-        int p2 = 0;
+        int p2 = n - 1;
+        int ans = 0;
 
-        while(p1 < n && p2 < m) {
-            if(Math.abs(d[p1] - a[p2]) <= k) {
-                ans++;
+        while (p1 <= p2) {
+            ans++;
+            if(c[p1]+c[p2] <= m) {
                 p1++;
-                p2++;
+                p2--;
             } else {
-                if (a[p2] < d[p1]) {
-                    p2++;
-                } else {
-                    p1++;
-                }
+                p2--;
             }
         }
 
