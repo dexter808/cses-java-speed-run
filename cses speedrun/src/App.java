@@ -81,11 +81,33 @@ public class App {
     // Logic implementation
     private static void solve() {
         int n = in.nextInt();
+        int m = in.nextInt();
+        int k = in.nextInt();
+        
+        int[] d = in.nextIntArray(n);
+        int[] a = in.nextIntArray(m);
 
-        HashSet<Integer> s = new HashSet<>();
-        for(int i = 0 ;i < n; i++) {
-            s.add(in.nextInt());
+        Arrays.sort(a);
+        Arrays.sort(d);
+
+        int ans = 0;
+        int p1 = 0;
+        int p2 = 0;
+
+        while(p1 < n && p2 < m) {
+            if(Math.abs(d[p1] - a[p2]) <= k) {
+                ans++;
+                p1++;
+                p2++;
+            } else {
+                if (a[p2] < d[p1]) {
+                    p2++;
+                } else {
+                    p1++;
+                }
+            }
         }
-        out.println(s.size());
+
+        out.println(ans);
     }
 }
