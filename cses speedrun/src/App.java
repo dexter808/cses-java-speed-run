@@ -78,29 +78,58 @@ public class App {
         out.flush();
     }
 
-    // Logic implementation
-    private static void solve() {
-        int n = in.nextInt();
-        int m = in.nextInt();
-
-        int[] c = in.nextIntArray(n);
-
-        Arrays.sort(c);
-
-        int p1 = 0;
-        int p2 = n - 1;
-        int ans = 0;
-
-        while (p1 <= p2) {
-            ans++;
-            if(c[p1]+c[p2] <= m) {
-                p1++;
-                p2--;
-            } else {
-                p2--;
+        // Logic implementation 
+        // Sort + DSU path complression
+        private static void solve() {
+            int n = in.nextInt();
+            int m = in.nextInt();
+    
+            int[] t = in.nextIntArray(n);
+            int[] ct = in.nextIntArray(m);
+            int[] gt = new int[n];
+    
+            // GOTO array
+            for(int i = 0; i < n; i++) {
+                gt[i]=-2;
+            }
+    
+            Arrays.sort(t);
+    
+            
+            for(int i = 0; i < m; i ++) {
+                int c = ct[i];
+                int l = 0;
+                int r = n - 1;
+                while (l <= r) {
+                    int mid = (l + r) / 2;
+                    if (t[mid] <= c) {
+                        l = mid + 1;
+                    } else {
+                        r = mid - 1;
+                    }
+                }
+                int ans = getIndex(gt, r);
+                if (ans < 0) {
+                    out.println(-1);
+                }
+                else {
+                    out.println(t[ans]);
+                }
             }
         }
-
-        out.println(ans);
-    }
+    
+        static int getIndex(int[] gt, int i) {
+            if( i <  0) {
+                return i;
+            }
+            if (gt[i] == -1) {
+                return -1;
+            }
+            if(gt[i] == -2) {
+                gt[i] = i - 1;
+                return i;
+            }
+            gt[i] = getIndex(gt, gt[i]);
+            return gt[i];
+        }
 }
