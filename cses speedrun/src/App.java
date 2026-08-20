@@ -84,18 +84,16 @@ public class App {
      */
     private static void solve() {
         int n = in.nextInt();
-        long t = in.nextLong();
-
         int[] a = in.nextIntArray(n);
-
-        HashMap<Long,Integer> p = new HashMap<>();
+        long ans = a[0];
+        long sum = 0;
+        long msum = 0;
 
         for(int i = 0; i < n; i++) {
-            if(p.containsKey(t - a[i])) {
-                out.println(p.get(t - a[i]) + " " + (i + 1));
-                return;
-            } p.put((long)a[i], i + 1);
+            sum += a[i];
+            ans = Math.max(ans, sum - msum);
+            msum = Math.min(msum, sum);
         }
-        out.println("IMPOSSIBLE");
+        out.println(ans);
     }
 }
