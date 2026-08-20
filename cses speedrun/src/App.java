@@ -84,24 +84,18 @@ public class App {
      */
     private static void solve() {
         int n = in.nextInt();
-        int[][] m = new int[n][2];
+        long t = in.nextLong();
 
-        for(int i = 0 ; i < n; i++) {
-            m[i][0] = in.nextInt();
-            m[i][1] = in.nextInt();
+        int[] a = in.nextIntArray(n);
+
+        HashMap<Long,Integer> p = new HashMap<>();
+
+        for(int i = 0; i < n; i++) {
+            if(p.containsKey(t - a[i])) {
+                out.println(p.get(t - a[i]) + " " + (i + 1));
+                return;
+            } p.put((long)a[i], i + 1);
         }
-        Arrays.sort(m, (a,b) -> Integer.compare(a[1],b[1]));
-
-        int ans = 1;
-        int c = 0;
-
-        for(int i = 1; i < n; i++) {
-            if (m[c][1] <= m[i][0]) {
-                c = i;
-                ans++;
-            }
-        }
-
-        out.println(ans);
+        out.println("IMPOSSIBLE");
     }
 }
