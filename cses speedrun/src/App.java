@@ -80,28 +80,27 @@ public class App {
 
     private static void solve() {
         int n = in.nextInt();
-        int[][] t = new int[n][2];
+        int[] a = new int[n];
+        int[] d = new int[n];
 
         for(int i = 0; i < n; i++) {
-            t[i][0] = in.nextInt();
-            t[i][1] = in.nextInt();
+            a[i] = in.nextInt();
+            d[i] = in.nextInt();
         }
+        
+        Arrays.sort(a);
+        Arrays.sort(d);
+        int ans = 0;
+        int p1 = 0; // exclusive
+        int p2 = 0; // exclusive
 
-        Arrays.sort(t, (a,b) -> Integer.compare(a[0], b[0]));
-
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b) -> {
-            return Integer.compare(a[1], b[1]);
-        });
-
-        int ans = 1;
-        pq.add(t[0]);
-
-        for(int i = 1; i < n; i++) {
-            while(!pq.isEmpty() && pq.peek()[1] < t[i][0]) {
-                pq.poll();
+        while(p1 < n) {
+            if (a[p1] < d[p2]) {
+                p1++;
+            } else {
+                p2++;
             }
-            pq.add(t[i]);
-            ans = Math.max(ans, pq.size());
+            ans = Math.max(ans, p1 - p2);
         }
         out.println(ans);
     }
