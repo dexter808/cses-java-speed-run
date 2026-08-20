@@ -1,5 +1,6 @@
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class App {
@@ -78,30 +79,29 @@ public class App {
         out.flush();
     }
 
+    /**
+     * Out of any 2 movies we will always choose the movie that ends first
+     */
     private static void solve() {
         int n = in.nextInt();
-        int[] a = new int[n];
-        int[] d = new int[n];
+        int[][] m = new int[n][2];
 
-        for(int i = 0; i < n; i++) {
-            a[i] = in.nextInt();
-            d[i] = in.nextInt();
+        for(int i = 0 ; i < n; i++) {
+            m[i][0] = in.nextInt();
+            m[i][1] = in.nextInt();
         }
-        
-        Arrays.sort(a);
-        Arrays.sort(d);
-        int ans = 0;
-        int p1 = 0; // exclusive
-        int p2 = 0; // exclusive
+        Arrays.sort(m, (a,b) -> Integer.compare(a[1],b[1]));
 
-        while(p1 < n) {
-            if (a[p1] < d[p2]) {
-                p1++;
-            } else {
-                p2++;
+        int ans = 1;
+        int c = 0;
+
+        for(int i = 1; i < n; i++) {
+            if (m[c][1] <= m[i][0]) {
+                c = i;
+                ans++;
             }
-            ans = Math.max(ans, p1 - p2);
         }
+
         out.println(ans);
     }
 }
