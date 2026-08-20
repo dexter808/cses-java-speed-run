@@ -78,58 +78,31 @@ public class App {
         out.flush();
     }
 
-        // Logic implementation 
-        // Sort + DSU path complression
-        private static void solve() {
-            int n = in.nextInt();
-            int m = in.nextInt();
-    
-            int[] t = in.nextIntArray(n);
-            int[] ct = in.nextIntArray(m);
-            int[] gt = new int[n];
-    
-            // GOTO array
-            for(int i = 0; i < n; i++) {
-                gt[i]=-2;
-            }
-    
-            Arrays.sort(t);
-    
-            
-            for(int i = 0; i < m; i ++) {
-                int c = ct[i];
-                int l = 0;
-                int r = n - 1;
-                while (l <= r) {
-                    int mid = (l + r) / 2;
-                    if (t[mid] <= c) {
-                        l = mid + 1;
-                    } else {
-                        r = mid - 1;
-                    }
-                }
-                int ans = getIndex(gt, r);
-                if (ans < 0) {
-                    out.println(-1);
-                }
-                else {
-                    out.println(t[ans]);
-                }
-            }
+    private static void solve() {
+        int n = in.nextInt();
+        int[][] t = new int[n][2];
+
+        for(int i = 0; i < n; i++) {
+            t[i][0] = in.nextInt();
+            t[i][1] = in.nextInt();
         }
-    
-        static int getIndex(int[] gt, int i) {
-            if( i <  0) {
-                return i;
+
+        Arrays.sort(t, (a,b) -> Integer.compare(a[0], b[0]));
+
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b) -> {
+            return Integer.compare(a[1], b[1]);
+        });
+
+        int ans = 1;
+        pq.add(t[0]);
+
+        for(int i = 1; i < n; i++) {
+            while(!pq.isEmpty() && pq.peek()[1] < t[i][0]) {
+                pq.poll();
             }
-            if (gt[i] == -1) {
-                return -1;
-            }
-            if(gt[i] == -2) {
-                gt[i] = i - 1;
-                return i;
-            }
-            gt[i] = getIndex(gt, gt[i]);
-            return gt[i];
+            pq.add(t[i]);
+            ans = Math.max(ans, pq.size());
         }
+        out.println(ans);
+    }
 }
