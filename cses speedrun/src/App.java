@@ -83,15 +83,20 @@ public class App {
     private static void solve() {
         int n = in.nextInt();
         int[] a = in.nextIntArray(n);
-        Arrays.sort(a);
+        int[] p = new int[n + 1];
 
-        long ans = 1;
-        for(int c: a) {
-            if (c > ans) {
-                break;
-            }
-            ans = ans + c;
+        for(int i = 0 ; i < n; i++) {
+            p[a[i]] = i;
         }
+
+        int ans = 1;
+
+        for(int i = 2; i <= n; i++) {
+            if(p[i] < p[i - 1]) {
+                ans++;
+            }
+        }
+
         out.println(ans);
     }
 }
