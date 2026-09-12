@@ -80,23 +80,59 @@ public class App {
         out.flush();
     }
 
+    /**
+     * 4 2 1 5 3 -> 3
+     * 4 1 2 5 3 -> 2
+     * 3 1 2 5 4 -> 
+     * 3 2 1 5 4
+     */
+
     private static void solve() {
-        int n = in.nextInt();
-        int[] a = in.nextIntArray(n);
-        int[] p = new int[n + 1];
+        char[] s = in.nextLine().toCharArray();
+        int n = s.length;
+
+        int[] fr = new int[26];
+
+        for(int i = 0; i < n; i++) {
+            fr[s[i] - 'A']++;
+        }
+
+        char[] ans = new char[n];
 
         for(int i = 0 ; i < n; i++) {
-            p[a[i]] = i;
+            ans[i] = '\u0000';
         }
 
-        int ans = 1;
-
-        for(int i = 2; i <= n; i++) {
-            if(p[i] < p[i - 1]) {
-                ans++;
+        for(int i = 0 ; i < n; i++) {
+            if (ans[i] != '\u0000') {
+                continue;
             }
+            int lc = (i == 0)?-1:(int)(ans[i - 1] - 'A');
+            int cl = n - i;
+            int fc = -1;
+            int hf = 0;
+            for(int j = 0; j < 26; j++) {
+                if(lc == j) {
+                    continue;
+                }
+                if(fr[j] > (cl + 1) / 2) {
+                    System.out.println(-1);
+                    return;
+                }
+                if(fc == -1 && fr[j] > 0) {
+                    fc = j;
+                }
+                if(fr[hf] < fr[j]) {
+                    hf = j;
+                }
+            }
+            int cc = fc;
+            if(cl % 2 == 1 && fr[hf] == ((cl/2) + 1)) {
+                cc = hf;
+            }
+            ans[i] = (char)(cc + 'A');
+            fr[cc]--;
         }
-
-        out.println(ans);
+        System.out.println(ans);
     }
 }
