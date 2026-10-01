@@ -69,8 +69,8 @@ public class App {
 
     public static void main(String[] args) throws IOException {
         // Read number of test cases (use 1 if the problem doesn't specify 't')
-        // int t = in.nextInt(); 
-        int t = 1; 
+        int t = in.nextInt(); 
+        // int t = 1; 
 
         while (t-- > 0) {
             solve();
@@ -80,59 +80,35 @@ public class App {
         out.flush();
     }
 
-    /**
-     * 4 2 1 5 3 -> 3
-     * 4 1 2 5 3 -> 2
-     * 3 1 2 5 4 -> 
-     * 3 2 1 5 4
-     */
-
     private static void solve() {
-        char[] s = in.nextLine().toCharArray();
-        int n = s.length;
+        int n = in.nextInt();
+        int k = in.nextInt();
 
-        int[] fr = new int[26];
+        out.println(getChildNumber(n,k));
+    }
 
-        for(int i = 0; i < n; i++) {
-            fr[s[i] - 'A']++;
+    private static int getChildNumber(int n, int k) {
+        int k2 = (n + 1) / 2;
+        if (n == 1) {
+            return 1;
         }
-
-        char[] ans = new char[n];
-
-        for(int i = 0 ; i < n; i++) {
-            ans[i] = '\u0000';
+        if (k <= k2) {
+            if(n % 2 == 1) {
+                return (2 * k) % n;
+            } else {
+                return (2 * k);
+            }
         }
+        // relabel
+        int nn = n - k2;
+        int nk = k - k2;
 
-        for(int i = 0 ; i < n; i++) {
-            if (ans[i] != '\u0000') {
-                continue;
-            }
-            int lc = (i == 0)?-1:(int)(ans[i - 1] - 'A');
-            int cl = n - i;
-            int fc = -1;
-            int hf = 0;
-            for(int j = 0; j < 26; j++) {
-                if(lc == j) {
-                    continue;
-                }
-                if(fr[j] > (cl + 1) / 2) {
-                    System.out.println(-1);
-                    return;
-                }
-                if(fc == -1 && fr[j] > 0) {
-                    fc = j;
-                }
-                if(fr[hf] < fr[j]) {
-                    hf = j;
-                }
-            }
-            int cc = fc;
-            if(cl % 2 == 1 && fr[hf] == ((cl/2) + 1)) {
-                cc = hf;
-            }
-            ans[i] = (char)(cc + 'A');
-            fr[cc]--;
+        int ans = getChildNumber(nn, nk);
+
+        if(n % 2 == 1) {
+            return 2 * ans + 1;
+        } else {
+            return 2 * ans - 1;
         }
-        System.out.println(ans);
     }
 }
