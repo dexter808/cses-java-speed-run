@@ -1,8 +1,6 @@
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class App {
 
@@ -69,8 +67,8 @@ public class App {
 
     public static void main(String[] args) throws IOException {
         // Read number of test cases (use 1 if the problem doesn't specify 't')
-        int t = in.nextInt(); 
-        // int t = 1; 
+        int t = 1; 
+        // t = in.nextInt(); 
 
         while (t-- > 0) {
             solve();
@@ -80,35 +78,84 @@ public class App {
         out.flush();
     }
 
+    /**
+     * 4 2 1 5 3
+     * 4 1 2 5 3
+     * 3 1 2 5 4
+     * 3 2 1 5 4
+     */
+    // static class Node {
+    //     int num;
+    //     int index;
+    //     Node prev;
+    //     Node next;
+    // }
     private static void solve() {
         int n = in.nextInt();
-        int k = in.nextInt();
+        int m = in.nextInt();
 
-        out.println(getChildNumber(n,k));
-    }
+        int[] a = in.nextIntArray(n);
+        int[] numToIndex = new int[n + 1];
+        int[] startNums = new int[n + 1];
+        int ans = n;
 
-    private static int getChildNumber(int n, int k) {
-        int k2 = (n + 1) / 2;
-        if (n == 1) {
-            return 1;
+        for(int i = 0; i < n; i++) {
+            numToIndex[a[i]] = i + 1;
+            startNums[a[i]] = 1;
         }
-        if (k <= k2) {
-            if(n % 2 == 1) {
-                return (2 * k) % n;
-            } else {
-                return (2 * k);
+        for(int i = 2; i <= n; i++) {
+            if (numToIndex[i - 1] < numToIndex[i]) {
+                startNums[i] = 0;
+                ans--;
             }
         }
-        // relabel
-        int nn = n - k2;
-        int nk = k - k2;
 
-        int ans = getChildNumber(nn, nk);
+        while(m > 0) {
+            m--;
 
-        if(n % 2 == 1) {
-            return 2 * ans + 1;
-        } else {
-            return 2 * ans - 1;
+            int x = in.nextInt();
+            int y = in.nextInt();
+
+            if (x > y) {
+                int t = y;
+                y = x;
+                x = t;
+            }
+
+            int cx = a[x - 1];
+            int cy = a[y - 1];
+
+            a[x - 1] = cy;
+            a[y - 1] = cx;
+
+            numToIndex[cy] =  x;
+            numToIndex[cx] =  y;
+
+            // going back can promote cy to become a leader index(cy - 1) > x
+            if (cy > 1 && x < numToIndex[cy - 1] && startNums[cy] == 0) {
+                startNums[cy] = 1;
+                ans++;
+            }
+            // going back can remove the cy+1 from leader if x < index(cy+1)
+            if (cy < n && x < numToIndex[cy + 1] && startNums[cy + 1] == 1) {
+                startNums[cy + 1] = 0;
+                ans--;
+            }
+
+            // going forward can remove cx from leader ship
+            if (cx > 1 && startNums[cx] == 1 && y > numToIndex[cx - 1]) {
+                startNums[cx] = 0;
+                ans--;
+            }
+            // going forward can make cx + 1 a leader 
+            if (cx < n && y > numToIndex[cx + 1] && startNums[cx + 1] == 0) {
+                startNums[cx + 1] = 1;
+                ans++;
+            }
+
+            out.println(ans);
         }
     }
+    // Time Complexity -> O(n + m)
+    // Space Complexity -> O(n)
 }
