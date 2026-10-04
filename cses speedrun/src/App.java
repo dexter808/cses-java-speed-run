@@ -1,8 +1,6 @@
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class App {
 
@@ -79,40 +77,46 @@ public class App {
         // Essential: Flush out the remaining stream before exiting
         out.flush();
     }
-    static int salt = 1;
+
+    private static class Node {
+        int n;
+        Node left;
+        Node right;
+
+        Node(int n1, Node left, Node right) {
+            n = n1;
+            this.left = left;
+            this.right = right;
+        }
+    }
+
     private static void solve() {
         int n = in.nextInt();
         int[] a = in.nextIntArray(n);
 
-        HashMap<Integer, Integer> m = new HashMap<>(); // frequency of elements inside the set
-        TreeSet<Integer> s = new TreeSet<>(); // Elements in order
+        int p1 = 0;
+        int p2 = 0;
+        HashMap<Integer, Integer> m = new HashMap<>();
+        long ans = 0;
+        long MOD = 1_000_000_000 + 7;
 
-        for(int e: a) {
-            m.put(e, 0);
+        
+        Arrays.stream(a).forEach(e -> {
+            m.putIfAbsent(e, 0);
+            m.put(e, m.get(e) + 1);
+        });
+
+        // Denoting not chosen case
+        m.keySet().stream().forEach(e -> {
+            m.put(e, m.get(e) + 1);
+        });
+        ans = 1;
+
+
+        for(int e: m.values()) {
+            ans = (ans * e) % MOD;
         }
 
-        for(int e: a) {
-            Integer g = s.higher(e);
-            if (g == null) {
-                m.put(e, m.get(e) + 1);
-                s.add(e);
-            } else {
-                m.put(g, m.get(g) - 1);
-                m.put(e, m.get(e) + 1);
-                s.add(e);
-                if(m.get(g) == 0) {
-                    s.remove(g);
-                }
-            }
-        }
-
-        int ans = 0;
-        for(int e: s) {
-            ans += m.get(e);
-        }
-
-        System.out.println(ans);
+        out.println(ans - 1);
     }
-    // T.C. = O(N)
-    // S.C = O(N)
 }
