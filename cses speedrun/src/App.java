@@ -1,17 +1,20 @@
+
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.*;
- 
+import java.util.stream.Collectors;
+
 public class App {
- 
+
     // Fast I/O Reader
     static class FastReader {
         BufferedReader br;
         StringTokenizer st;
- 
+
         public FastReader() {
             br = new BufferedReader(new InputStreamReader(System.in));
         }
- 
+
         String next() {
             while (st == null || !st.hasMoreElements()) {
                 try {
@@ -24,19 +27,19 @@ public class App {
             }
             return st.nextToken();
         }
- 
+
         int nextInt() {
             return Integer.parseInt(next());
         }
- 
+
         long nextLong() {
             return Long.parseLong(next());
         }
- 
+
         double nextDouble() {
             return Double.parseDouble(next());
         }
- 
+
         String nextLine() {
             String str = "";
             try {
@@ -50,7 +53,7 @@ public class App {
             }
             return str;
         }
- 
+
         // Helper to read primitive integer arrays quickly
         int[] nextIntArray(int n) {
             int[] arr = new int[n];
@@ -60,87 +63,66 @@ public class App {
             return arr;
         }
     }
- 
+
     static FastReader in = new FastReader();
     static PrintWriter out = new PrintWriter(new BufferedOutputStream(System.out));
- 
+
     public static void main(String[] args) throws IOException {
         // Read number of test cases (use 1 if the problem doesn't specify 't')
         int t = 1; 
         // t = in.nextInt(); 
- 
+
         while (t-- > 0) {
             solve();
         }
- 
+
         // Essential: Flush out the remaining stream before exiting
         out.flush();
     }
- 
+
     private static class Node {
         int n;
-        Node left;
         Node right;
- 
-        Node(int n1, Node left, Node right) {
-            n = n1;
+        Node left;
+        Node (int n, Node left, Node right) {
+            this.n = n;
             this.left = left;
             this.right = right;
         }
     }
- 
+
+    private static void remove(Node node) {
+        Node l = node.left;
+        Node r = node.right;
+
+        node.left = node.right = null;
+
+        l.right = r;
+        r.left = l;
+    }
+
     private static void solve() {
-        int x = in.nextInt();
         int n = in.nextInt();
- 
-        // ArrayList<Integer> a = new ArrayList<>();
-        int[] a = in.nextIntArray(n);
-        
-        int[] b = new int[n + 2];
-        for (int i = 0; i < n; i++) {
-            b[i] = a[i];
+        Node head = new Node(1, null, null);
+        Node n1 = head;
+        for(int i = 2; i <= n; i++) {
+            Node h2 = new Node(i, head, null);
+            head.right = h2;
+            head = h2;
         }
-        b[n] = 0;
-        b[n + 1] = x;
- 
- 
-        Map<Integer, Node> m = new HashMap<>();
-        
-        Arrays.sort(b);
- 
-        int l = b[1];
-        for(int e: b) {
-            m.put(e, new Node(e, null, null));
-        }
- 
-        for(int i = 0; i < n + 2; i++) {
-            if (i > 0) {
-                l = Math.max(l, b[i] - b[i - 1]);
-                m.get(b[i]).left = m.get(b[i - 1]);
-            }
-            if (i < n + 1) {
-                m.get(b[i]).right = m.get(b[i + 1]);
-            }
-        }// 0 - 3 - 6 - 8
- 
-        int[] ans = new int[n];
- 
-        for(int i = n - 1; i >= 0; i--) {
-            ans[i] = l;
-            
-            int t = a[i];
-            Node node = m.get(t);
-            Node le = node.left;
-            Node ri = node.right;
- 
-            le.right = ri;
-            ri.left = le;
- 
-            l = Math.max(l, ri.n - le.n);
-        }
- 
-        for(int e: ans) {
-            out.print(e + " ");
+        n1.left = head;
+        head.right = n1;
+
+        head = n1.right;
+
+        int t = n;
+        Node next = null;
+        while (t > 0) {
+            t--;
+            out.print(head.n + " ");
+            next = head.right;
+            remove(head);
+            head = next.right;
         }
         out.println();
     }
