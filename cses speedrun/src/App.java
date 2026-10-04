@@ -90,27 +90,58 @@ public class App {
     }
  
     private static void solve() {
+        int x = in.nextInt();
         int n = in.nextInt();
+ 
+        // ArrayList<Integer> a = new ArrayList<>();
         int[] a = in.nextIntArray(n);
- 
-        int p1 = 0;
-        int p2 = 0;
-        HashMap<Integer, Integer> m = new HashMap<>();
-        long ans = 0;
- 
-        while (p2 < n) {
-            while (m.containsKey(a[p2]) && m.get(a[p2]) > 0) {
-                m.put(a[p1], m.get(a[p1]) - 1);
-                p1++;
-            }
-            if(m.containsKey(a[p2])) {
-                m.put(a[p2], m.get(a[p2]) + 1);
-            } else {
-                m.put(a[p2], 1);
-            }
-            ans += p2 - p1 + 1;
-            p2++;
+        
+        int[] b = new int[n + 2];
+        for (int i = 0; i < n; i++) {
+            b[i] = a[i];
         }
-        out.println(ans);
+        b[n] = 0;
+        b[n + 1] = x;
+ 
+ 
+        Map<Integer, Node> m = new HashMap<>();
+        
+        Arrays.sort(b);
+ 
+        int l = b[1];
+        for(int e: b) {
+            m.put(e, new Node(e, null, null));
+        }
+ 
+        for(int i = 0; i < n + 2; i++) {
+            if (i > 0) {
+                l = Math.max(l, b[i] - b[i - 1]);
+                m.get(b[i]).left = m.get(b[i - 1]);
+            }
+            if (i < n + 1) {
+                m.get(b[i]).right = m.get(b[i + 1]);
+            }
+        }// 0 - 3 - 6 - 8
+ 
+        int[] ans = new int[n];
+ 
+        for(int i = n - 1; i >= 0; i--) {
+            ans[i] = l;
+            
+            int t = a[i];
+            Node node = m.get(t);
+            Node le = node.left;
+            Node ri = node.right;
+ 
+            le.right = ri;
+            ri.left = le;
+ 
+            l = Math.max(l, ri.n - le.n);
+        }
+ 
+        for(int e: ans) {
+            out.print(e + " ");
+        }
+        out.println();
     }
 }
